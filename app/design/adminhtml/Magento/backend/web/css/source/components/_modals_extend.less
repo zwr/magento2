@@ -26,26 +26,30 @@
 
 .modal-popup,
 .modal-slide {
-  .action-close {
-    color: @modal-action-close__color;
-    position: absolute;
-    right: 0;
-    top: 0;
-    &:active {
-      transform: none;
-      &:before {
-        font-size: @modal-action-close__active__font-size;
-      }
+    .action-close {
+        color: @modal-action-close__color;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 1;
+        &:active {
+            transform: none;
+            &:before {
+                font-size: @modal-action-close__active__font-size;
+            }
+        }
+        &:hover {
+            &:before {
+                color: @modal-action-close__hover__color;
+            }
+        }
+        &:before {
+            font-size: @modal-action-close__font-size;
+        }
+        &:focus {
+            background: none;
+        }
     }
-    &:hover {
-      &:before {
-        color: @modal-action-close__hover__color;
-      }
-    }
-    &:before {
-      font-size: @modal-action-close__font-size;
-    }
-  }
 }
 
 .modal-popup {
