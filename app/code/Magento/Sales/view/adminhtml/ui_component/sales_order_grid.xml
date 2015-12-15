@@ -598,7 +598,7 @@
                 </item>
             </argument>
         </column>
-        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>

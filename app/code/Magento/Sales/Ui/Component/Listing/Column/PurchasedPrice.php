@@ -13,7 +13,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Class Price
  */
-class Price extends Column
+class PurchasedPrice extends Column
 {
     /**
      * @var PriceCurrencyInterface
@@ -44,21 +44,24 @@ class Price extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array &$dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $currencyCode = isset($item['base_currency_code']) ? $item['base_currency_code'] : null;
-                $item[$this->getData('name')] = $this->priceFormatter->format(
-                    $item[$this->getData('name')],
-                    false,
-                    null,
-                    null,
-                    $currencyCode
-                );
+                $currencyCode = isset($item['order_currency_code']) ? $item['order_currency_code'] : null;
+                $item[$this->getData('name')] =
+                    $this->priceFormatter->format(
+                        $item[$this->getData('name')],
+                        false,
+                        null,
+                        null,
+                        $currencyCode
+                    );
             }
         }
+
+        return $dataSource;
     }
 }
