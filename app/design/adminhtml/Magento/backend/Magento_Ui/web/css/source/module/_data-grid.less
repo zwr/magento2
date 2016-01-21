@@ -349,50 +349,17 @@
                cursor: -moz-grabbing;
                     cursor: grabbing;
         }
-        td {
-            border-left: @data-grid-dragging-copy__border;
-            border-right: @data-grid-dragging-copy__border;
-        }
-        &._in-edit {
-            .data-grid-editable-row {
-                &.data-grid-bulk-edit-panel {
-                    &:hover {
-                        td {
-                            background-color: fade(@data-grid-bulk-edit-panel__background-color, @data-grid-td__dragging__opacity);
-                        }
-                    }
+        tbody {
+            tr {
+                &:last-child {
                     td {
-                        background-color: fade(@data-grid-bulk-edit-panel__background-color, @data-grid-td__dragging__opacity);
-                        &:before {
-                            background-color: fade(@data-grid-bulk-edit-panel__background-color, @data-grid-td__dragging__opacity);
-                        }
+                        border-bottom: @data-grid-dragging-copy__border;
                     }
                 }
-                &:hover {
-                    td {
-                        background-color: fade(@data-grid-td__odd__background-color, @data-grid-td__dragging__opacity);
-                    }
-                }
-                td {
-                    background-color: fade(@data-grid-td__odd__background-color, @data-grid-td__dragging__opacity);
-                    &:before,
-                    &:after {
-                        left: 0;
-                        right: 0;
-                    }
-                    &:before {
-                        background-color: fade(@data-grid-td__odd__background-color, @data-grid-td__dragging__opacity);
-                    }
-                    &:only-child {
-                        border-left: @data-grid-dragging-copy__border;
-                        border-right: @data-grid-dragging-copy__border;
-                        left: 0; // Cancel border overlay fix in Firefox
-                    }
-                }
-                .admin__control-text,
-                .admin__control-select {
-                    opacity: @disabled__opacity;
-                }
+            }
+            td {
+                border-left: @data-grid-dragging-copy__border;
+                border-right: @data-grid-dragging-copy__border;
             }
         }
     }
@@ -404,90 +371,6 @@
         button,
         [class*='admin__control-'] {
             margin-top: -@field-control__padding-top - @field-control__border-width - .1rem;
-        }
-    }
-    //  Editable row
-    &._in-edit {
-        tr {
-            &:hover {
-                td {
-                    background-color: @data-grid-td__odd__edit__background-color;
-                }
-            }
-        }
-        ._odd-row {
-            &.data-grid-editable-row {
-                &:hover {
-                    td {
-                        background-color: @data-grid-td__odd__background-color;
-                    }
-                }
-                td {
-                    background-color: @data-grid-td__odd__background-color;
-                }
-            }
-            &:hover {
-                td {
-                    background-color: @data-grid-td__even__edit__background-color;
-                }
-            }
-            td {
-                background-color: @data-grid-td__even__edit__background-color;
-            }
-        }
-        .data-grid-editable-row-actions {
-            &:hover {
-                td {
-                    background-color: @data-grid-td__odd__background-color;
-                }
-            }
-            td {
-                background-color: @data-grid-td__odd__background-color;
-            }
-        }
-        td {
-            background-color: @data-grid-td__odd__edit__background-color;
-            pointer-events: none;
-        }
-        .data-grid-checkbox-cell {
-            pointer-events: auto;
-        }
-        .data-grid-editable-row {
-            border: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-editable-cell__border-color;
-            border-bottom-color: @color-gray76;
-            &:hover {
-                td {
-                    background-color: @data-grid-td__odd__background-color;
-                }
-            }
-            td {
-                background-color: @data-grid-td__odd__background-color;
-                border-bottom-color: @data-grid-td__odd__background-color;
-                border-left-style: hidden;
-                border-right-style: hidden;
-                border-top-color: @data-grid-td__odd__background-color;
-                pointer-events: auto;
-                vertical-align: middle;
-                &:first-child {
-                    border-left-color: @data-grid-editable-cell__border-color;
-                    border-left-style: solid;
-                    &:after {
-                        left: 0;
-                    }
-                    &:before {
-                        left: 0;
-                    }
-                }
-                &:last-child {
-                    td {
-                        border-bottom: @data-grid-dragging-copy__border;
-                    }
-                }
-            }
-            td {
-                border-left: @data-grid-dragging-copy__border;
-                border-right: @data-grid-dragging-copy__border;
-            }
         }
     }
 }
