@@ -1,3 +1,13 @@
+1.0.0-beta10
+=============
+* Fixed bugs:
+    * Fixed an issue when selected options aren't displayed in Wish List product details section
+    * Fixed an issue where an imported product with replace behaviour causes an error for multi-store implementations
+    * Fixed an issue with BaseURL in static files
+* Various improvements:
+    * Fixed several security-related issues
+    * Added support of latest USPS API
+    
 1.0.0-beta9
 =============
 * Fixed bugs:
