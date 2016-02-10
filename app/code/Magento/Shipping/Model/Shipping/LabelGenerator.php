@@ -17,7 +17,7 @@ class LabelGenerator
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
      */
-    protected $carrierFactory;
+    protected $_carrierFactory;
 
     /**
      * @var \Magento\Shipping\Model\Shipping\LabelsFactory
@@ -53,7 +53,7 @@ class LabelGenerator
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
         \Magento\Framework\Filesystem $filesystem
     ) {
-        $this->carrierFactory = $carrierFactory;
+        $this->_carrierFactory = $carrierFactory;
         $this->labelFactory = $labelFactory;
         $this->scopeConfig = $scopeConfig;
         $this->trackFactory = $trackFactory;
@@ -69,7 +69,7 @@ class LabelGenerator
     public function create(\Magento\Sales\Model\Order\Shipment $shipment, RequestInterface $request)
     {
         $order = $shipment->getOrder();
-        $carrier = $this->carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
+        $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         if (!$carrier->isShippingLabelsAvailable()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Shipping labels is not available.'));
         }
