@@ -99,13 +99,35 @@ class LabelGenerator
             $shipment->getStoreId()
         );
         if (!empty($trackingNumbers)) {
-            foreach ($trackingNumbers as $trackingNumber) {
-                $track = $this->trackFactory->create()
-                    ->setNumber($trackingNumber)
-                    ->setCarrierCode($carrierCode)
-                    ->setTitle($carrierTitle);
-                $shipment->addTrack($track);
+            $this->addTrackingNumbersToShipment($shipment, $trackingNumbers, $carrierCode, $carrierTitle);
+        }
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Shipment $shipment
+     * @param array|string $trackingNumbers
+     * @param string $carrierCode
+     * @param string $carrierTitle
+     *
+     * @return void
+     */
+    private function addTrackingNumbersToShipment(
+        \Magento\Sales\Model\Order\Shipment $shipment,
+        $trackingNumbers,
+        $carrierCode,
+        $carrierTitle
+    ) {
+        if (is_array($trackingNumbers)) {
+            foreach ($trackingNumbers as $number) {
+                $this->addTrackingNumbersToShipment($shipment, $number, $carrierCode, $carrierTitle);
             }
+        } else {
+            $shipment->addTrack(
+                $this->trackFactory->create()
+                    ->setNumber($trackingNumbers)
+                    ->setCarrierCode($carrierCode)
+                    ->setTitle($carrierTitle)
+            );
         }
     }
 
@@ -147,7 +169,7 @@ class LabelGenerator
             DirectoryList::TMP
         );
         $directory->create();
-        $image = imagecreatefromstring($imageString);
+        $image = @imagecreatefromstring($imageString);
         if (!$image) {
             return false;
         }
