@@ -97,7 +97,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::MULTILINE_COUNT  => 0,
                     AttributeMetadata::DATA_MODEL       => '',
                     AttributeMetadata::OPTIONS          => [
-                        ['label' => '', 'value' => ''],
+                        ['label' => ' ', 'value' => ''],
                         ['label' => 'Male', 'value' => '1'],
                         ['label' => 'Female', 'value' => '2'],
                     ],

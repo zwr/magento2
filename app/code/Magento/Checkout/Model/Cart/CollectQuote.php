@@ -69,18 +69,10 @@ class CollectQuote
     {
         if ($this->customerSession->isLoggedIn()) {
             $customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
-            if ($defaultShipping = $customer->getDefaultShipping()) {
-                $address = $this->addressRepository->getById($defaultShipping);
-                if ($address) {
-                    /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
-                    $estimatedAddress = $this->estimatedAddressFactory->create();
-                    $estimatedAddress->setCountryId($address->getCountryId());
-                    $estimatedAddress->setPostcode($address->getPostcode());
-                    $estimatedAddress->setRegion((string)$address->getRegion()->getRegion());
-                    $estimatedAddress->setRegionId($address->getRegionId());
-                    $this->shippingMethodManager->estimateByAddress($quote->getId(), $estimatedAddress);
-                    $this->quoteRepository->save($quote);
-                }
+            if (!$customer->getDefaultShipping()) {
+                $quote->setTotalsCollectedFlag(false);
+                $quote->collectTotals();
+                $this->quoteRepository->save($quote);
             }
         }
     }
