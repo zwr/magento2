@@ -8,7 +8,7 @@
 
 ?>
 <script>
-require(["jquery", "collapsable", "prototype"], function(jQuery){
+require(["jquery", "uiRegistry", "collapsable", "prototype"], function(jQuery, rg) {
 
 function toggleApplyVisibility(select) {
     if ($(select).value == 1) {
@@ -38,6 +38,9 @@ function checkOptionsPanelVisibility(){
 
         if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')){
             panel.show();
+            rg.get('manage-options-panel', function() {
+                jQuery('#manage-options-panel').trigger('render');
+            });
         }
         else {
             panel.hide();
