@@ -7,7 +7,6 @@ namespace Magento\Braintree\Test\Unit\Block\PayPal;
 
 use Magento\Braintree\Block\PayPal\Shortcut;
 
-
 class ShortcutTest extends \PHPUnit_Framework_TestCase
 {
     /**
