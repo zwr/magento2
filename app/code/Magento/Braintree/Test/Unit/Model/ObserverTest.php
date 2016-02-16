@@ -9,6 +9,7 @@ namespace Magento\Braintree\Test\Unit\Model;
 use Magento\Braintree\Model\Observer;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Braintree\Model\PaymentMethod;
+use Magento\Braintree\Block\PayPal\Shortcut;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -365,6 +366,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testAddPaypalShortcuts()
     {
         $orPosition = 'before';
+        $isInMiniCart = true;
 
         $containerMock = $this->getMockBuilder('\Magento\Catalog\Block\ShortcutButtons')
             ->disableOriginalConstructor()
@@ -409,7 +411,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 '',
                 [
                     'data' => [
-                        'container' => $containerMock,
+                        Shortcut::MINI_CART_FLAG_KEY => $isInMiniCart,
                     ]
                 ]
             )->willReturn($shortcutMock);
@@ -427,9 +429,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testAddPaypalShortcutsNotActive()
     {
+        $event = new \Magento\Framework\Object(
+            [
+                'is_catalog_product' => false,
+            ]
+        );
         $observer = new \Magento\Framework\Event\Observer(
             [
-                'event' => null,
+                'event' => $event,
             ]
         );
 
