@@ -5,6 +5,9 @@
  */
 namespace Magento\Braintree\Test\Unit\Block\PayPal;
 
+use Magento\Braintree\Block\PayPal\Shortcut;
+
+
 class ShortcutTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -256,11 +259,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             'Magento\Braintree\Block\PayPal\Shortcut',
             [
                 'data' => [
-                    'container' => new \Magento\Framework\Object(
-                        [
-                            'module_name' => 'Magento_Catalog',
-                        ]
-                    )
+                    Shortcut::MINI_CART_FLAG_KEY => 1
                 ]
             ]
         );
