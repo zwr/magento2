@@ -1,3 +1,53 @@
+1.0.0-beta10
+=============
+* Fixed bugs:
+    * Fixed an issue when selected options aren't displayed in Wish List product details section
+    * Fixed an issue where an imported product with replace behaviour causes an error for multi-store implementations
+    * Fixed an issue with BaseURL in static files
+* Various improvements:
+    * Fixed several security-related issues
+    * Added support of latest USPS API
+    
+1.0.0-beta9
+=============
+* Fixed bugs:
+    * Fixed an issue when Catalog Price Rules don't work when based on configurable attribute
+    * Fixed an issue when Discount applied only for correct attribute, but price displaying for other atributes incorrect
+    * Fixed an issue with Java script error on CMS Hierarchy page: unable to add nodes
+    * Fixed an issue when Paypal doesn't work correctly if discount brings the subtotal to negative but the grand total is positive
+    * Fixed an issue when some javascript function calls and labels aren't translatable
+* GitHub issues and requests:
+    * [#2226](https://github.com/magento/magento2/issues/2226) -- Configurable product issues after saving
+
+1.0.0-beta8
+=============
+* Fixed bugs:
+    * Fixed an issue with redirect to blank page when canceling checkout with PayPal Express in Website Payments Pro Hosted Solution
+    * Fixed an issue "The stock item for Product in option is not valid." when adding configurable product on second website
+    * Fixed an issue where check javascript function calls and labels are translatable
+    * Fixed an issue with random exception during using admin "Unable to send the cookie. Maximum number of cookies would be exceeded."
+    * Fixed an issue where reset password page not displayed, instead user login page displayed.
+    * Fixed an issue where guests who already subscribed to the newsletter will always get a thank you message and receive a subscription success email if they subscribe again
+    * Fixed an issue with no possibility to import images when DocumentRoot is pub/index.php
+    * Fixed an issue when adding product configurations uses name based SKU
+    * Fixed an issue with error when capturing on partial shipment with bundle product in Braintree payment method
+
+1.0.0-beta7
+=============
+* Fixed bugs:
+    * Fixed an issue where RequireJS fails while loading via CDN
+    * Fixed an issue where a guest user subscribes, the storeview is not saved/displayed in the admin panel
+    * Fixed an issue where product export and re-import with different store view level data causes data corruption
+    * Fixed an issue where ./bin/magento cache:clean doesn't clear varnish
+    * Fixed an issue where every call to non-cached page generates errors in the exception logs because of layout errors
+    * Fixed an issue with values for custom product attribute of type text area when product is updated via import
+    * Fixed an issue where Paypal doesn't work correctly if discount brings the subtotal to negative but the grand total is positive
+    * Fixed an issue with no proper indication about why an image is not deleted when it is in use in one of the storeviews
+    * Fixed an issue where shipping and billing country are missing from the information transmitted to paypal
+    * Fixed an issue with impossibility to complete Braintree PayPal Checkout if street line 2 is empty
+* Various improvements:
+    * Added integration with NewRelic
+
 1.0.0-beta6
 =============
 * Fixed bugs:

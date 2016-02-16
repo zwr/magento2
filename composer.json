@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "1.0.0-beta6",
+    "version": "1.0.0-beta10",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -78,6 +78,7 @@
         "magento/module-catalog-import-export": "self.version",
         "magento/module-catalog-inventory": "self.version",
         "magento/module-catalog-rule": "self.version",
+        "magento/module-catalog-rule-configurable": "self.version",
         "magento/module-catalog-search": "self.version",
         "magento/module-catalog-url-rewrite": "self.version",
         "magento/module-catalog-widget": "self.version",
@@ -117,6 +118,7 @@
         "magento/module-media-storage": "self.version",
         "magento/module-msrp": "self.version",
         "magento/module-multishipping": "self.version",
+        "magento/module-new-relic-reporting": "self.version",
         "magento/module-newsletter": "self.version",
         "magento/module-offline-payments": "self.version",
         "magento/module-offline-shipping": "self.version",
