@@ -7,6 +7,10 @@ namespace Magento\Braintree\Model;
 
 use Magento\Braintree\Block\PayPal\Shortcut;
 
+/**
+ * Class Observer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     const CONFIG_PATH_CAPTURE_ACTION    = 'capture_action';
