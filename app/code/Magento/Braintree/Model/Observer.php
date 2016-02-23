@@ -5,8 +5,12 @@
  */
 namespace Magento\Braintree\Model;
 
-use Magento\Braintree\Model\Config\PayPal as PayPalConfig;
+use Magento\Braintree\Block\PayPal\Shortcut;
 
+/**
+ * Class Observer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     const CONFIG_PATH_CAPTURE_ACTION    = 'capture_action';
@@ -141,23 +145,25 @@ class Observer
      */
     public function addPaypalShortcuts(\Magento\Framework\Event\Observer $observer)
     {
+        $isMiniCart = !$observer->getEvent()->getIsCatalogProduct();
+
         //Don't display shortcut on product view page
         if (!$this->methodPayPal->isActive() ||
             !$this->paypalConfig->isShortcutCheckoutEnabled() ||
-            $observer->getEvent()->getIsCatalogProduct()) {
+            !$isMiniCart) {
             return;
         }
 
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
 
-        /** @var \Magento\Braintree\Block\PayPal\Shortcut $shortcut */
+        /** @var Shortcut $shortcut */
         $shortcut = $shortcutButtons->getLayout()->createBlock(
             self::PAYPAL_SHORTCUT_BLOCK,
             '',
             [
                 'data' => [
-                    'container' => $shortcutButtons,
+                    Shortcut::MINI_CART_FLAG_KEY => $isMiniCart
                 ]
             ]
         );
@@ -165,9 +171,7 @@ class Observer
         if ($shortcut->skipShortcutForGuest()) {
             return;
         }
-        $shortcut->setShowOrPosition(
-            $observer->getEvent()->getOrPosition()
-        );
+        $shortcut->setShowOrPosition($observer->getEvent()->getOrPosition());
         $shortcutButtons->addShortcut($shortcut);
     }
 }
