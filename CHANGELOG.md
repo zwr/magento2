@@ -2,11 +2,11 @@
 =============
 * Fixed bugs:
     * Fixed an issue with shipping calculation on checkout
-    * Fixed an issue when unable to unset optional dropdown product attribute
+    * Fixed an issue with inability to unset optional dropdown product attribute
     * Fixed an issue with customer attributes dropdown options
     * Fixed an issue with caching of Javascript translations
-    * Fixed an issue with currency rendering in Orders grid
-    * Fixed an issue with Paypal via Braintree button rendering in the minicart
+    * Fixed an issue with currency rendering in orders grid
+    * Fixed an issue with rendering Paypal (via Briantree) button in the minicart
 * Various improvements:
     * Fixed several security-related issues
 
