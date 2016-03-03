@@ -1,3 +1,15 @@
+1.0.0-beta11
+=============
+* Fixed bugs:
+    * Fixed an issue with shipping calculation on checkout
+    * Fixed an issue with inability to unset optional dropdown product attribute
+    * Fixed an issue with customer attributes dropdown options
+    * Fixed an issue with caching of Javascript translations
+    * Fixed an issue with currency rendering in orders grid
+    * Fixed an issue with rendering Paypal (via Briantree) button in the minicart
+* Various improvements:
+    * Fixed several security-related issues
+
 1.0.0-beta10
 =============
 * Fixed bugs:
