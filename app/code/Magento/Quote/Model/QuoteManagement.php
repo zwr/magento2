@@ -20,6 +20,7 @@ use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
 
 /**
@@ -257,8 +258,12 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $quote->setCustomer($customer);
         $quote->setCustomerIsGuest(0);
         $this->quoteRepository->save($quote);
-        $quoteFactory = $this->getQuoteIdMaskFactory();
-        $quoteFactory->create()->load($cartId, 'quote_id')->delete();
+        $quoteIdMaskFactory = $this->getQuoteIdMaskFactory();
+        /** @var  \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMask = $quoteIdMaskFactory->create()->load($cartId, 'quote_id');
+        if ($quoteIdMask->getId()) {
+            $quoteIdMask->delete();
+        }
         return true;
 
     }
