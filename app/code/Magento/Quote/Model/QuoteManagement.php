@@ -22,7 +22,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
-
 /**
  * Class QuoteManagement
  *
