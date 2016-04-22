@@ -62,6 +62,8 @@ class ConfigGenerator
     /**
      * Creates install segment config data
      *
+     * @deprecated
+     *
      * @return ConfigData
      */
     public function createInstallConfig()

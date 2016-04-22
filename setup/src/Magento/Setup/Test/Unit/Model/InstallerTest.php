@@ -226,7 +226,14 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
             BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
         ];
-        $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
+        $this->config->expects($this->atLeastOnce())
+            ->method('get')
+            ->willReturnMap(
+                [
+                    [SetupConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT, null, true],
+                    [SetupConfigOptionsList::CONFIG_PATH_CRYPT_KEY, null, true],
+                ]
+            );
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
         $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
@@ -286,6 +293,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->at(31))->method('log')->with('Current status:');
         $this->logger->expects($this->at(34))->method('log')->with('Disabling Maintenance Mode:');
         $this->logger->expects($this->at(36))->method('log')->with('Post installation file permissions check...');
+        $this->logger->expects($this->at(38))->method('log')->with('Write installation date...');
         $this->logger->expects($this->once())->method('logSuccess')->with('Magento installation complete.');
         $this->object->install($request);
     }
@@ -356,7 +364,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUninstall()
     {
-        $this->config->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->configReader->expects($this->once())->method('getFiles')->willReturn(['ConfigOne.php', 'ConfigTwo.php']);
         $configDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $configDir
@@ -421,7 +428,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testCleanupDb()
     {
-        $this->config->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->once())
             ->method('get')
             ->with(SetupConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT)
@@ -467,7 +473,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
+        $this->config->expects($this->atLeastOnce())
+            ->method('get')
+            ->with(SetupConfigOptionsList::KEY_MODULES)
+            ->willReturn(true);
         $newObject = $this->createObject(false, false);
         $this->configReader->expects($this->once())->method('load')
             ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0]]);
