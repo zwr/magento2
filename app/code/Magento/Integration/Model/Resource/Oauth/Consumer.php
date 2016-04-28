@@ -76,7 +76,7 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $adapter->select()
             ->from($this->getMainTable())
             ->reset(\Zend_Db_Select::COLUMNS)
-            ->columns('CURRENT_TIMESTAMP() - created_at')
+            ->columns(new \Zend_Db_Expr('UTC_TIMESTAMP() - created_at'))
             ->where('entity_id = ?', $consumerId);
 
         return $adapter->fetchOne($select);
@@ -94,7 +94,7 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $readAdapter->select()
             ->from($this->getMainTable())
             ->reset(\Magento\Framework\DB\Select::COLUMNS)
-            ->columns(new \Zend_Db_Expr('CURRENT_TIMESTAMP() - updated_at'))
+            ->columns(new \Zend_Db_Expr('UTC_TIMESTAMP() - updated_at'))
             ->where('entity_id = ?', $consumerId);
 
         return $readAdapter->fetchOne($select);
