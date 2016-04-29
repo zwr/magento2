@@ -330,12 +330,12 @@ class Installer
         }
     }
 
-   /**
-    * Writes installation date to the configuration
-    *
-    * @return void
-    * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
-    */
+    /**
+     * Writes installation date to the configuration
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     */
     private function writeInstallationDate()
     {
         $dateData = new ConfigData(ConfigFilePool::APP_ENV);
@@ -828,8 +828,8 @@ class Installer
     {
         $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
         if (!$config) {
-        throw new \Magento\Setup\Exception(
-            "Can't run this operation: configuration for DB connection is absent."
+            throw new \Magento\Setup\Exception(
+                "Can't run this operation: configuration for DB connection is absent."
             );
         }
     }
