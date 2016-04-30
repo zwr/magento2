@@ -820,10 +820,10 @@ class Installer
         }
     }
 
-   /**
-    * @return void
-    * @throws \Magento\Setup\Exception
-    */
+    /**
+     * @return void
+     * @throws \Magento\Setup\Exception
+     */
     private function assertDbConfigExists()
     {
         $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
