@@ -47,9 +47,13 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->controller = new Install(
             $this->webLogger,
             $installerFactory,
-            $this->progressFactory,
-            $this->deploymentConfig
+            $this->progressFactory
         );
+ 
+         $deploymentConfigReflection = new \ReflectionClass(get_class($this->controller));
+         $deploymentConfigReflectionProperty = $deploymentConfigReflection->getProperty('deploymentConfig');
+         $deploymentConfigReflectionProperty->setAccessible(true);
+         $deploymentConfigReflectionProperty->setValue($this->controller, $this->deploymentConfig);
     }
 
     public function testIndexAction()
