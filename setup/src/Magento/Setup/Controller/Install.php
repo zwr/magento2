@@ -138,6 +138,7 @@ class Install extends AbstractActionController
     /**
      * Checks for prior install
      *
+     * @return void
      * @throws \Magento\Setup\Exception
      */
     private function checkForPriorInstall()
