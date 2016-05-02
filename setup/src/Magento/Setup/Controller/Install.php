@@ -19,6 +19,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Install controller
@@ -43,6 +44,11 @@ class Install extends AbstractActionController
     private $progressFactory;
 
     /**
+    * @var \Magento\Framework\App\DeploymentConfig
+    */
+    private $deploymentConfig;
+
+     /**
      * Default Constructor
      *
      * @param WebLogger $logger
@@ -52,11 +58,13 @@ class Install extends AbstractActionController
     public function __construct(
         WebLogger $logger,
         InstallerFactory $installerFactory,
-        ProgressFactory $progressFactory
+        ProgressFactory $progressFactory,
+        DeploymentConfig $deploymentConfig
     ) {
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);
         $this->progressFactory = $progressFactory;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -79,6 +87,7 @@ class Install extends AbstractActionController
         $this->log->clear();
         $json = new JsonModel;
         try {
+            $this->checkForPriorInstall();
             $data = array_merge(
                 $this->importDeploymentConfigForm(),
                 $this->importUserConfigForm(),
@@ -93,6 +102,7 @@ class Install extends AbstractActionController
             $json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
         } catch (\Exception $e) {
             $this->log->logError($e);
+            $json->setVariable('messages', $e->getMessage());
             $json->setVariable('success', false);
             if ($e instanceof \Magento\Setup\SampleDataException) {
                 $json->setVariable('isSampleDataError', true);
@@ -123,6 +133,18 @@ class Install extends AbstractActionController
             }
         }
         return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
+    }
+
+    /**
+     * Checks for prior install
+     *
+     * @throws \Magento\Setup\Exception
+     */
+    private function checkForPriorInstall()
+    {
+        if ($this->deploymentConfig->isAvailable()) {
+            throw new \Magento\Setup\Exception('Magento application is already installed.');
+        }
     }
 
     /**
