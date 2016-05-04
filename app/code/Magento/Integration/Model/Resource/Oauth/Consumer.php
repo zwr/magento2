@@ -65,6 +65,8 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Compute time in seconds since consumer was created.
      *
+     * @deprecated
+     *
      * @param int $consumerId - The consumer id
      * @return int - time lapsed in seconds
      */
@@ -74,7 +76,7 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $adapter->select()
             ->from($this->getMainTable())
             ->reset(\Zend_Db_Select::COLUMNS)
-            ->columns('CURRENT_TIMESTAMP() - created_at')
+            ->columns(new \Zend_Db_Expr('CURRENT_TIMESTAMP() - created_at'))
             ->where('entity_id = ?', $consumerId);
 
         return $adapter->fetchOne($select);
