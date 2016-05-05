@@ -43,11 +43,11 @@ class Install extends AbstractActionController
     private $progressFactory;
 
     /**
-    * @var \Magento\Framework\App\DeploymentConfig
-    */
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
     private $deploymentConfig;
 
-     /**
+    /**
      * Default Constructor
      *
      * @param WebLogger $logger
