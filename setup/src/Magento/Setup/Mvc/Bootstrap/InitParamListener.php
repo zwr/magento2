@@ -8,6 +8,7 @@ namespace Magento\Setup\Mvc\Bootstrap;
 
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Shell\ComplexParameter;
@@ -38,6 +39,16 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @var \Zend\Stdlib\CallbackHandler[]
      */
     private $listeners = [];
+
+    /**
+     * List of controllers which should be skipped from auth check
+     *
+     * @var array
+     */
+    private $controllersToSkip = [
+        'Magento\Setup\Controller\Session',
+        'Magento\Setup\Controller\Success'
+    ];
 
     /**
      * {@inheritdoc}
@@ -79,6 +90,57 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         $serviceManager = $application->getServiceManager();
         $serviceManager->setService('Magento\Framework\App\Filesystem\DirectoryList', $directoryList);
         $serviceManager->setService('Magento\Framework\Filesystem', $this->createFilesystem($directoryList));
+
+        if (!($application->getRequest() instanceof Request)) {
+            $eventManager = $application->getEventManager();
+            $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$this, 'authPreDispatch'], 100);
+        }
+    }
+
+    /**
+     * Check if user login
+     *
+     * @param \Zend\Mvc\MvcEvent $event
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function authPreDispatch($event)
+    {
+        /** @var RouteMatch $routeMatch */
+        $routeMatch = $event->getRouteMatch();
+        $controller = $routeMatch->getParam('controller');
+
+        if (!in_array($controller, $this->controllersToSkip)) {
+            /** @var Application $application */
+            $application = $event->getApplication();
+            $serviceManager = $application->getServiceManager();
+            if ($serviceManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+                /** @var \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider */
+                $objectManagerProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
+                /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+                $objectManager = $objectManagerProvider->get();
+                /** @var \Magento\Framework\App\State $adminAppState */
+                $adminAppState = $objectManager->get('Magento\Framework\App\State');
+                $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
+                $objectManager->create(
+                    'Magento\Backend\Model\Auth\Session',
+                    [
+                        'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
+                        'appState' => $adminAppState
+                    ]
+                );
+
+                if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
+                    $response = $event->getResponse();
+                    $baseUrl = Http::getDistroBaseUrlPath($_SERVER);
+                    $response->getHeaders()->addHeaderLine('Location', $baseUrl . 'index.php/session/unlogin');
+                    $response->setStatusCode(302);
+                    $event->stopPropagation();
+                    return $response;
+                }
+            }
+        }
+        return false;
     }
 
     /**

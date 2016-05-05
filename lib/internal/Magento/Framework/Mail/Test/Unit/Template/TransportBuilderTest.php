@@ -134,41 +134,38 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
                 \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
                 \Magento\Framework\Mail\Message::TYPE_TEXT,
                 'Plain text',
+                null
             ],
             [
                 \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
                 \Magento\Framework\Mail\Message::TYPE_HTML,
-                '<h1>Html message</h1>'
+                '<h1>Html message</h1>',
+                'Test\Namespace\Template'
             ]
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testSetFrom()
     {
         $sender = ['email' => 'from@example.com', 'name' => 'name'];
-        $this->senderResolverMock->expects(
-            $this->once()
-        )->method(
-            'resolve'
-        )->with(
-            $sender
-        )->will(
-            $this->returnValue($sender)
-        );
-        $this->messageMock->expects(
-            $this->once()
-        )->method(
-            'setFrom'
-        )->with(
-            'from@example.com',
-            'name'
-        )->will(
-            $this->returnSelf()
-        );
+        $this->senderResolverMock->expects($this->once())
+            ->method('resolve')
+            ->with($sender)
+            ->willReturn($sender);
+        $this->messageMock->expects($this->once())
+            ->method('setFrom')
+            ->with('from@example.com', 'name')
+            ->willReturnSelf();
 
         $this->builder->setFrom($sender);
     }
 
+    /**
+     * @return void
+     */
     public function testSetCc()
     {
         $this->messageMock->expects($this->once())->method('addCc')->with('cc@example.com')->will($this->returnSelf());
@@ -184,33 +181,33 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
         $this->messageMock->expects($this->once())
             ->method('addTo')
             ->with('to@example.com', 'recipient')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->builder->addTo('to@example.com', 'recipient');
     }
 
     /**
-     * @covers \Magento\Framework\Mail\Template\TransportBuilder::addBcc
+     * @return void
      */
     public function testAddBcc()
     {
         $this->messageMock->expects($this->once())
             ->method('addBcc')
             ->with('bcc@example.com')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->builder->addBcc('bcc@example.com');
     }
 
     /**
-     * @covers \Magento\Framework\Mail\Template\TransportBuilder::setReplyTo
+     * @return void
      */
     public function testSetReplyTo()
     {
         $this->messageMock->expects($this->once())
             ->method('setReplyTo')
             ->with('replyTo@example.com', 'replyName')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->builder->setReplyTo('replyTo@example.com', 'replyName');
     }
