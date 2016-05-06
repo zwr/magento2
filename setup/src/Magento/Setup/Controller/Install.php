@@ -43,6 +43,11 @@ class Install extends AbstractActionController
     private $progressFactory;
 
     /**
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Default Constructor
      *
      * @param WebLogger $logger
@@ -79,6 +84,7 @@ class Install extends AbstractActionController
         $this->log->clear();
         $json = new JsonModel;
         try {
+            $this->checkForPriorInstall();
             $data = array_merge(
                 $this->importDeploymentConfigForm(),
                 $this->importUserConfigForm(),
@@ -93,6 +99,7 @@ class Install extends AbstractActionController
             $json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
         } catch (\Exception $e) {
             $this->log->logError($e);
+            $json->setVariable('messages', $e->getMessage());
             $json->setVariable('success', false);
             if ($e instanceof \Magento\Setup\SampleDataException) {
                 $json->setVariable('isSampleDataError', true);
@@ -123,6 +130,19 @@ class Install extends AbstractActionController
             }
         }
         return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
+    }
+
+    /**
+     * Checks for prior install
+     *
+     * @return void
+     * @throws \Magento\Setup\Exception
+     */
+    private function checkForPriorInstall()
+    {
+        if ($this->getDeploymentConfig()->isAvailable()) {
+            throw new \Magento\Setup\Exception('Magento application is already installed.');
+        }
     }
 
     /**
@@ -205,5 +225,21 @@ class Install extends AbstractActionController
         $result[AdminAccount::KEY_FIRST_NAME] = $result[AdminAccount::KEY_USER];
         $result[AdminAccount::KEY_LAST_NAME] = $result[AdminAccount::KEY_USER];
         return $result;
+    }
+
+    /**
+     * Get Deployment Config
+     *
+     * @return \Magento\Framework\App\DeploymentConfig
+     *
+     * @deprecated
+     */
+    private function getDeploymentConfig()
+    {
+        if ($this->deploymentConfig === null) {
+            $this->deploymentConfig = $this->installer->getObjectManagerProvider()->get()
+                ->get(\Magento\Framework\App\DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
     }
 }
