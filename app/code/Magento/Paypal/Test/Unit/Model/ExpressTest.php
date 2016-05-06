@@ -160,5 +160,4 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->assignData($data);
     }
-
 }

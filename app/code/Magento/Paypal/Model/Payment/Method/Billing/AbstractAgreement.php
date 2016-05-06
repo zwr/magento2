@@ -12,6 +12,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
  * Billing Agreement Payment Method Abstract model
  *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractMethod
 {
