@@ -17,7 +17,7 @@ use Magento\Payment\Model\MethodInterface;
  * Payment method facade. Abstract method adapter
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class Adapter implements MethodInterface
 {
