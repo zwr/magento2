@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Billing;
 
+use Magento\Paypal\Model\Billing\Agreement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
@@ -28,7 +29,7 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = $objectManager->getObject('Magento\Paypal\Model\Billing\Agreement', [
+        $this->model = $objectManager->getObject(Agreement::class, [
             'paymentData' => $this->paymentDataMock
         ]);
     }

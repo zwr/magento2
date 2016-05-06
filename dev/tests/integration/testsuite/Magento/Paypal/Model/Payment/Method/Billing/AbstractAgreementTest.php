@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Model\Payment\Method\Billing;
 
+use Magento\Quote\Api\Data\PaymentInterface;
 
 class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,7 +59,11 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
         $billingAgreement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
         )->getFirstItem();
-        $data = [AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID => $billingAgreement->getId()];
+        $data = [
+            PaymentInterface::KEY_ADDITIONAL_DATA => [
+                AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID => $billingAgreement->getId()
+            ]
+        ];
         $this->_model->assignData($data);
         $this->assertEquals(
             'REF-ID-TEST-678',
