@@ -108,7 +108,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      */
     public function beforeSave()
     {
-        $this->setUpdatedAt(time());
         $this->validate();
         parent::beforeSave();
         return $this;
