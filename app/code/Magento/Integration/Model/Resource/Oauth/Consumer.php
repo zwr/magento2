@@ -44,7 +44,6 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $object->setUpdatedAt($this->_dateTime->formatDate(time()));
         return parent::_beforeSave($object);
     }
 
