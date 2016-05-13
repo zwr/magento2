@@ -1,3 +1,8 @@
+1.0.0-beta12
+=============
+* Security fixes:
+    * This release contains several security fixes. We describe each issue in detail in the Magento Security Center (https://www.magento.com/security).
+
 1.0.0-beta11
 =============
 * Fixed bugs:
