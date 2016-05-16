@@ -46,10 +46,6 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function assignData($data)
     {
-        if (!$data instanceof \Magento\Framework\Object) {
-            $data = new \Magento\Framework\Object($data);
-        }
-
         $this->getInfoInstance()->setPoNumber($data->getPoNumber());
         return $this;
     }

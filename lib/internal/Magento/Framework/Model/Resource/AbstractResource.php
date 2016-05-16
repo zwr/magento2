@@ -8,6 +8,8 @@
 
 namespace Magento\Framework\Model\Resource;
 
+use Magento\Framework\Object;
+
 /**
  * Abstract resource model
  */
@@ -130,57 +132,55 @@ abstract class AbstractResource
     /**
      * Serialize specified field in an object
      *
-     * @param \Magento\Framework\Object $object
+     * @param Object $object
      * @param string $field
      * @param mixed $defaultValue
      * @param bool $unsetEmpty
      * @return $this
      */
-    protected function _serializeField(\Magento\Framework\Object $object, $field, $defaultValue = null, $unsetEmpty = false)
+    protected function _serializeField(Object $object, $field, $defaultValue = null, $unsetEmpty = false)
     {
         $value = $object->getData($field);
-        if (empty($value)) {
-            if ($unsetEmpty) {
-                $object->unsetData($field);
-            } else {
-                if (is_object($defaultValue) || is_array($defaultValue)) {
-                    $defaultValue = serialize($defaultValue);
-                }
-                $object->setData($field, $defaultValue);
-            }
-        } elseif (is_array($value) || is_object($value)) {
-            $object->setData($field, serialize($value));
+        if (empty($value) && $unsetEmpty) {
+            $object->unsetData($field);
+        } else {
+            $object->setData($field, serialize($value ?: $defaultValue));
         }
 
         return $this;
     }
 
     /**
-     * Unserialize \Magento\Framework\Object field in an object
+     * Unserialize Object field in an object
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param Object $object
      * @param string $field
      * @param mixed $defaultValue
      * @return void
      */
-    protected function _unserializeField(\Magento\Framework\Object $object, $field, $defaultValue = null)
+    protected function _unserializeField(Object $object, $field, $defaultValue = null)
     {
         $value = $object->getData($field);
+        if ($value) {
+            $unserializedValue = @unserialize($value);
+            $value = $unserializedValue !== false || $value === 'b:0;' ? $unserializedValue : $value;
+        }
+
         if (empty($value)) {
             $object->setData($field, $defaultValue);
-        } elseif (!is_array($value) && !is_object($value)) {
-            $object->setData($field, unserialize($value));
+        } else {
+            $object->setData($field, $value);
         }
     }
 
     /**
      * Prepare data for passed table
      *
-     * @param \Magento\Framework\Object $object
+     * @param Object $object
      * @param string $table
      * @return array
      */
-    protected function _prepareDataForTable(\Magento\Framework\Object $object, $table)
+    protected function _prepareDataForTable(Object $object, $table)
     {
         $data = [];
         $fields = $this->_getWriteAdapter()->describeTable($table);

@@ -5,7 +5,11 @@
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Framework\Object;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
+use Magento\Paypal\Model\Express;
+use Magento\Quote\Api\Data\PaymentInterface;
 
 class ExpressTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,23 +70,26 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_pro = $this->getMock(
-            'Magento\Paypal\Model\ProFactory',
-            ['create', 'setMethod', 'getApi', 'importPaymentInfo', 'resetApi'],
+            'Magento\Paypal\Model\Pro',
+            ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi'],
             [],
             '',
             false
         );
-        $this->_pro->expects($this->any())->method('create')->will($this->returnSelf());
+        $this->_pro->expects($this->any())->method('getApi')->will($this->returnValue($this->_nvp));
         $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     public function testSetApiProcessableErrors()
     {
         $this->_nvp->expects($this->once())->method('setProcessableErrors')->with($this->errorCodes);
-        $this->_pro->expects($this->any())->method('getApi')->will($this->returnValue($this->_nvp));
+
         $this->_model = $this->_helper->getObject(
             'Magento\Paypal\Model\Express',
-            ['proFactory' => $this->_pro, 'checkoutSession' => $this->_checkoutSession]
+            [
+                'data' => [$this->_pro],
+                'checkoutSession' => $this->_checkoutSession
+            ]
         );
     }
 
@@ -93,7 +100,7 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         $this->_nvp->expects($this->any())->method('setCurrencyCode')->will($this->returnSelf());
         $this->_nvp->expects($this->any())->method('setTransactionId')->will($this->returnSelf());
         $this->_nvp->expects($this->any())->method('callDoAuthorization')->will($this->returnSelf());
-        $this->_pro->expects($this->any())->method('getApi')->will($this->returnValue($this->_nvp));
+
         $this->_checkoutSession->expects($this->once())->method('getPaypalTransactionData')->will(
             $this->returnValue([])
         );
@@ -112,9 +119,45 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         $paymentModel->expects($this->any())->method('getIsTransactionPending')->will($this->returnSelf());
         $this->_model = $this->_helper->getObject(
             'Magento\Paypal\Model\Express',
-            ['proFactory' => $this->_pro, 'checkoutSession' => $this->_checkoutSession]
+            [
+                'data' => [$this->_pro],
+                'checkoutSession' => $this->_checkoutSession
+            ]
         );
         $this->_model->order($paymentModel, 12.3);
         $this->assertEquals('payment_review', $paymentModel->getState());
+    }
+
+    public function testAssignData()
+    {
+        $transportValue = 'something';
+
+        $data = new Object(
+            [
+                PaymentInterface::KEY_ADDITIONAL_DATA => [
+                    Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => $transportValue
+                ]
+            ]
+        );
+
+        $this->_model = $this->_helper->getObject(
+            'Magento\Paypal\Model\Express',
+            [
+                'data' => [$this->_pro],
+                'checkoutSession' => $this->_checkoutSession
+            ]
+        );
+
+        $paymentInfo = $this->getMock(InfoInterface::class);
+        $this->_model->setInfoInstance($paymentInfo);
+
+        $paymentInfo->expects(static::once())
+            ->method('setAdditionalInformation')
+            ->with(
+                Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT,
+                $transportValue
+            );
+
+        $this->_model->assignData($data);
     }
 }

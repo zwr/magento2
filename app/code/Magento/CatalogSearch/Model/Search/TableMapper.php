@@ -18,6 +18,10 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\RequestInterface;
 
+/**
+ * Class TableMapper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TableMapper
 {
     /**

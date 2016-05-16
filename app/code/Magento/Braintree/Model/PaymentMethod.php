@@ -10,6 +10,7 @@ use Magento\Braintree\Model\Adapter\BraintreeTransaction;
 use \Braintree_Exception;
 use \Braintree_Transaction;
 use \Braintree_Result_Successful;
+use Magento\Framework\Object;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
@@ -245,15 +246,29 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      */
     public function assignData($data)
     {
-        parent::assignData($data);
+        $additionalData = $data->getAdditionalData();
+
+        if (!is_array($data->getAdditionalData())) {
+            return $this;
+        }
+        $additionalData = new Object($additionalData);
+
         $infoInstance = $this->getInfoInstance();
         if ($this->getConfigData('fraudprotection') > 0) {
-            $infoInstance->setAdditionalInformation('device_data', $data->getData('device_data'));
+            $infoInstance->setAdditionalInformation('device_data', $additionalData->getData('device_data'));
         }
-        $infoInstance->setAdditionalInformation('cc_last4', $data->getData('cc_last4'));
-        $infoInstance->setAdditionalInformation('cc_token', $data->getCcToken());
-        $infoInstance->setAdditionalInformation('payment_method_nonce', $data->getPaymentMethodNonce());
-        $infoInstance->setAdditionalInformation('store_in_vault', $data->getStoreInVault());
+        $infoInstance->setAdditionalInformation('cc_last4', $additionalData->getData('cc_last4'));
+        $infoInstance->setAdditionalInformation('cc_token', $additionalData->getCcToken());
+        $infoInstance->setAdditionalInformation(
+            'payment_method_nonce',
+            $additionalData->getPaymentMethodNonce()
+        );
+
+        $infoInstance->setCcLast4($additionalData->getData('cc_last4'));
+        $infoInstance->setCcType($additionalData->getData('cc_type'));
+        $infoInstance->setCcExpMonth($additionalData->getData('cc_exp_month'));
+        $infoInstance->setCcExpYear($additionalData->getData('cc_exp_year'));
+
         return $this;
     }
 

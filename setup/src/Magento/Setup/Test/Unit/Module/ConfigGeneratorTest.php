@@ -25,6 +25,9 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->configGeneratorObject = new ConfigGenerator($random, $deployConfig);
     }
 
+    /**
+     * @deprecated
+     */
     public function testCreateInstallConfig()
     {
         $returnValue = $this->configGeneratorObject->createInstallConfig([]);

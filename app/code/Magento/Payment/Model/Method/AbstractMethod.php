@@ -19,6 +19,7 @@ use Magento\Quote\Api\Data\PaymentMethodInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
  */
 abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
     MethodInterface,
@@ -761,14 +762,10 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param array|\Magento\Framework\Object $data
      * @return $this
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function assignData($data)
     {
-        if (is_array($data)) {
-            $this->getInfoInstance()->addData($data);
-        } elseif ($data instanceof \Magento\Framework\Object) {
-            $this->getInfoInstance()->addData($data->getData());
-        }
         return $this;
     }
 
