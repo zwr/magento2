@@ -3,22 +3,22 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "1.0.0-beta11",
-        "magento/module-catalog": "1.0.0-beta11",
-        "magento/module-customer": "1.0.0-beta11",
-        "magento/module-eav": "1.0.0-beta11",
-        "magento/module-theme": "1.0.0-beta11",
-        "magento/module-backend": "1.0.0-beta11",
-        "magento/module-newsletter": "1.0.0-beta11",
-        "magento/framework": "1.0.0-beta11",
-        "magento/module-ui": "1.0.0-beta11",
+        "magento/module-store": "1.0.0-beta12",
+        "magento/module-catalog": "1.0.0-beta12",
+        "magento/module-customer": "1.0.0-beta12",
+        "magento/module-eav": "1.0.0-beta12",
+        "magento/module-theme": "1.0.0-beta12",
+        "magento/module-backend": "1.0.0-beta12",
+        "magento/module-newsletter": "1.0.0-beta12",
+        "magento/framework": "1.0.0-beta12",
+        "magento/module-ui": "1.0.0-beta12",
         "magento/magento-composer-installer": "*"
     },
     "suggest": {
-        "magento/module-cookie": "1.0.0-beta11"
+        "magento/module-cookie": "1.0.0-beta12"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta11",
+    "version": "1.0.0-beta12",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
